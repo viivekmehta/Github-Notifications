@@ -34,15 +34,15 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    public void sendMessage2() {
+    public void sendMessage2(String commitsMessage) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel notificationChannel = new NotificationChannel("default","test",NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(notificationChannel);
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
         Notification.Builder notification = new Notification.Builder(this, "default")
-                .setContentTitle("You have a new message!!")
-                .setContentText("Hello World!!")
+                .setContentTitle("You have new commit in Github!!")
+                .setContentText(commitsMessage)
                 .setSmallIcon(R.drawable.kohli)
                 .setContentIntent(pendingIntent);
         notificationManager.notify(0,notification.build());
@@ -81,18 +81,18 @@ public class MainActivity extends AppCompatActivity {
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
-                                Log.i("response","Success ==> "+response.toString());
+                                if(response != null && response.length()>0) {
+                                    sendMessage2(response.toString());
+                                }
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.i("response","Error ==> "+error.toString());
                             }
                         }
                 );
                 requestQueue.add(arrayRequest);
-                sendMessage2();
             }
         },0,10000);
     }
