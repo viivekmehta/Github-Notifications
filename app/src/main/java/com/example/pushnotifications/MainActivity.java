@@ -33,16 +33,33 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    EditText userId;
+    EditText repositoryName;
+
+    public void sendCommitNotification(String commitsMessage) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel notificationChannel = new NotificationChannel("default","test",NotificationManager.IMPORTANCE_DEFAULT);
+        notificationManager.createNotificationChannel(notificationChannel);
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
+        Notification.Builder notification = new Notification.Builder(this, "default")
+                .setContentTitle("You have new commit in Github!!")
+                .setContentText(commitsMessage)
+                .setSmallIcon(R.drawable.kohli)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(0,notification.build());
+    }
 
     public void startTracking(View view) {
-
+        userId = (EditText) findViewById(R.id.editText);
+        repositoryName = (EditText) findViewById(R.id.editText2);
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Instant currentTime = Instant.now();
                 Instant previousTime = Instant.now().minusSeconds(10);
                 Log.i("Current Time","Current Time ==> "+currentTime.toString()+" and previous time  ==> "+previousTime.toString());
-                String url = "https://api.github.com/repos/viivekmehta/Github-Notifications/commits?since="+previousTime.toString()+"&until"+currentTime.toString();
+                String url = "https://api.github.com/repos/"+userId+"/"+repositoryName+"/commits?since="+previousTime.toString()+"&until"+currentTime.toString();
                 RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
                 JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET,
                         url,
@@ -52,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onResponse(JSONArray response) {
                                 if(response != null && response.length()>0) {
                                     Log.i("Success","Success ==> "+response.toString());
-                                    sendMessage2(response.toString());
+                                    sendCommitNotification(response.toString());
                                 }
                             }
                         },
@@ -69,24 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage2(String commitsMessage) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel notificationChannel = new NotificationChannel("default","test",NotificationManager.IMPORTANCE_DEFAULT);
-        notificationManager.createNotificationChannel(notificationChannel);
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
-        Notification.Builder notification = new Notification.Builder(this, "default")
-                .setContentTitle("You have new commit in Github!!")
-                .setContentText(commitsMessage)
-                .setSmallIcon(R.drawable.kohli)
-                .setContentIntent(pendingIntent);
-        notificationManager.notify(0,notification.build());
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 }
