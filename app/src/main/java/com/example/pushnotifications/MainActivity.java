@@ -57,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Instant currentTime = Instant.now();
-                Instant previousTime = Instant.now().minusSeconds(10);
+                Instant previousTime = Instant.now().minusSeconds(60);
                 Log.i("Current Time","Current Time ==> "+currentTime.toString()+" and previous time  ==> "+previousTime.toString());
-                String url = "https://api.github.com/repos/"+userId.getText().toString()+"/"+repositoryName.getText().toString()+"/commits?since="+previousTime.toString()+"&until"+currentTime.toString();
+                //String url = "https://api.github.com/repos/"+userId.getText().toString()+"/"+repositoryName.getText().toString()+"/commits?since="+previousTime.toString()+"&until"+currentTime.toString();
+                String url = "https://api.github.com/repos/"+userId.getText().toString()+"/"+repositoryName.getText().toString()+"/commits";
                 RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
                 JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET,
                         url,
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 requestQueue.add(arrayRequest);
             }
-        },0,10000);
+        },0,60000);
 
     }
 
