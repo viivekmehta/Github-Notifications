@@ -68,14 +68,18 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONArray response) {
                                 if(response != null && response.length()>0) {
+                                    Toast.makeText(getBaseContext(), "We have a new commit !!", Toast.LENGTH_SHORT).show();
                                     Log.i("Success","Success ==> "+response.toString());
                                     sendCommitNotification(response.toString());
+                                } else {
+                                    Toast.makeText(getBaseContext(), "No new commits !!", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getBaseContext(), "We have a error ==> "+error.toString(), Toast.LENGTH_SHORT).show();
                                 Log.i("Error","Error ==> "+error.toString());
                             }
                         }
