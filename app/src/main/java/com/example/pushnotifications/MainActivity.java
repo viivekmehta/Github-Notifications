@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 Instant currentTime = Instant.now();
                 Instant previousTime = Instant.now().minusSeconds(10);
-                Log.i("Current Time","Current Time ==> "+currentTime.toString()+" and previous time ==> "+previousTime.toString());
+                Log.i("Current Time","Current Time ==> "+currentTime.toString()+" and previous time  ==> "+previousTime.toString());
                 String url = "https://api.github.com/repos/viivekmehta/Github-Notifications/commits?since="+previousTime.toString()+"&until"+currentTime.toString();
                 RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
                 JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET,
