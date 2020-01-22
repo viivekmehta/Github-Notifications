@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Notification.Builder notification = new Notification.Builder(this, "default")
                 .setContentTitle("You have new commit in Github!!")
                 .setContentText(commitsMessage)
-                .setSmallIcon(R.drawable.kohli)
+                .setSmallIcon(R.drawable.github_logo)
                 .setContentIntent(pendingIntent);
         notificationManager.notify(0,notification.build());
     }
